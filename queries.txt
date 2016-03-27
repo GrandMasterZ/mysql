@@ -1,0 +1,81 @@
+1.
+
+CREATE DATABASE Books;
+
+2.
+
+mysql -u root -p Books < Books.sql
+
+3a.
+
+INSERT INTO Authors VALUES('NULL', 'Jonas');
+INSERT INTO Authors VALUES('NULL', 'Petras');
+INSERT INTO Authors VALUES('NULL', 'Antanas');
+INSERT INTO Authors VALUES('NULL', 'Mykolas');
+
+3b.
+
+INSERT INTO Books VALUES('NULL', 8, 'Kliudziau', 1998);
+INSERT INTO Authors VALUES('NULL', 9, 'Altorius', 1978);
+INSERT INTO Authors VALUES('NULL', 10, 'Laimes Ziburys', 1956);
+INSERT INTO Authors VALUES('NULL', 11, 'Uzklydau', 1987);
+
+3c.
+
+SELECT Books.*, Authors.name FROM Books LEFT JOIN Authors ON Books.authorId=Authors.authorId;
+
+3d.
+
+UPDATE Books SET authorId=8 Where bookId=1;
+
+3e.
+
+SELECT Authors.name, COUNT(*) FROM Books LEFT JOIN Authors ON Authors.authorId=Books.authorId WHERE Authors.name IS NOT NULL GROUP BY Authors.name;
+
+3f.
+
+DELETE FROM Authors WHERE authorId between 8 and 11;
+
+3g.
+
+DELETE FROM Books Where authorId IS NULL;
+
+4a.
+
+ALTER TABLE Books ADD genreId int;
+
+CREATE TABLE Genre(genreId int NOT NULL PRIMARY KEY AUTO_INCREMENT, title varchar(20));
+
+4b.
+
+ALTER TABLE Books DROP COLUMN authorId;
+
+CREATE TABLE Authors_Books(authorId int,bookId int,PRIMARY KEY(authorId,bookId));
+
+4c.
+
+INSERT INTO Authors_Books Values(1,7);
+INSERT INTO Authors_Books Values(2,8);
+INSERT INTO Authors_Books Values(7,1);
+INSERT INTO Authors_Books Values(3,4);
+INSERT INTO Authors_Books Values(5,7);
+INSERT INTO Authors_Books Values(4,6);
+INSERT INTO Authors_Books Values(7,9);
+
+4d.
+
+SELECT title,group_concat(name) FROM Authors_Books LEFT JOIN Books on Authors_Books.bookId=Books.bookId LEFT JOIN Authors ON Authors_Books.authorId=Authors.authorId WHERE title IS NOT NULL group by title;
+
+4e.
+
+ALTER DATABASE Books CHARACTER SET utf8 COLLATE utf8_lithuanian_ci;
+
+UPDATE Books SET title='Laimės Žiburys' Where bookId=12;
+
+5.
+
+mysqldump -u root -p  Books > Knygos.sql
+
+
+
+
